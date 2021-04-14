@@ -1,22 +1,41 @@
 import Link from 'next/link'
+import { Card, Badge, Row, Col } from 'react-bootstrap'
 
-export default function Home( {posts} ){
-
-  return(
-    <div>
-      <h1>Hello From The Home Page!</h1>
+export default function Home(
+  { posts }) {
+    console.log(posts)
+  return (
+    <Row className="mt-5">
       {
         posts.nodes.map(post => {
-          return(
-            <ul key={post.slug}>
-              <li>
-                <Link href={`/posts/${post.slug}`}>{post.title}</Link>
-              </li>
-            </ul>
+          return (
+            <Col
+              xs={3}
+              key={post.slug}
+              >
+              <Card>
+                <Card.Img variant="top" src={post.featuredImage.node.mediaItemUrl} style={{ maxHeight: '150px' }} />
+                <Card.Body>
+                  <Card.Title>{post.title}</Card.Title>
+                  <div style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    {
+                      post.tags.nodes.map(tag => {
+                        return (
+                          <span className="mr-2" xs={3} key={tag.id}>
+                            <Badge variant="primary">{tag.name}</Badge>
+                          </span>
+                        )
+                      })
+                    }
+                  </div>
+                  <Card.Link href={`/posts/${post.slug}`}>View</Card.Link>
+                </Card.Body>
+              </Card>
+            </Col>
           )
         })
       }
-    </div>
+    </Row>
   )
 
 }
@@ -32,6 +51,17 @@ export async function getStaticProps() {
           nodes {
             title
             slug
+            featuredImage {
+              node {
+                mediaItemUrl
+              }
+            },
+            tags {
+              nodes {
+                name
+                id
+              }
+            }
           }
         }
       }
@@ -39,7 +69,6 @@ export async function getStaticProps() {
     })
   })
   const json = await res.json();
-
   return {
     props: {
       posts: json.data.posts
