@@ -5,13 +5,7 @@ export default class TopNavigation extends Component {
         return (
             <>
                 <Navbar bg="light" variant="light" className="shadow">
-                    <Navbar.Brand>
-                        <img 
-                            src="logo.svg"
-                            width="30"
-                            height="30"
-                            color="white"
-                        />{' '}
+                    <Navbar.Brand href="/">
                         NextJs-WP Blog
                     </Navbar.Brand>
                 </Navbar>
